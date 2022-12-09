@@ -1,6 +1,6 @@
 // I2C Master
 // I2C Master Verilog Implementation (I2C_Master.v)
-// Jason Losh
+// Mourya Chandra
 
 //-----------------------------------------------------------------------------
 // Hardware Target
@@ -12,28 +12,28 @@
 
 module I2C_Serial_Interface (clk, reset, SLAVE_ADDRESS_r,data_from_tx_fifo,tx_fifo_rd_en,control_reg,data_to_rx_fifo,rx_fifo_wr_en,i2c_sda,i2c_scl,ref_clk_test, debug_port);
 
-    // Clock, reset
-    input   clk, reset;
+    	// Clock, reset
+    	input   clk, reset;
 	 
-	 //SLAVE ADDRESS
-	 input [6:0]  SLAVE_ADDRESS_r									;
+    	//SLAVE ADDRESS
+	input [6:0]  	SLAVE_ADDRESS_r				;
 	 
 	 //TX_RX_FIFO INTERFACE
-	 input [7:0] 	data_from_tx_fifo								;
-	 output 			tx_fifo_rd_en									;
-	 output reg [7:0]	data_to_rx_fifo								;
-	 output		 	rx_fifo_wr_en									;
+	input [7:0] 	data_from_tx_fifo			;
+	output 		tx_fifo_rd_en				;
+	output reg [7:0]data_to_rx_fifo				;
+	output		rx_fifo_wr_en				;
 	 
 	 //I2C control reg
-	 input [31:0] 	control_reg										;
+	 input [31:0] 	control_reg				;
     
-    //I2C BUS 
-    inout 	   	i2c_sda											;
-    output			i2c_scl											;
-    output 			ref_clk_test									;
+    	//I2C BUS 
+    	inout 	   	i2c_sda					;
+    	output		i2c_scl					;
+    	output 		ref_clk_test				;
     
-    // debug interface
-    output [47:0] debug_port										;
+    	// debug interface
+    	output [47:0] debug_port				;
     
     // FSM  states
     parameter IDLE	      		 			= 4'b0000		;
