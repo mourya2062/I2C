@@ -1,6 +1,6 @@
-// QE IP Example
-// QE Driver (qe_driver.c)
-// Jason Losh
+// I2C Driver 
+// I2C Driver  (I2C_driver.c)
+// Mourya Chandra 
 
 //-----------------------------------------------------------------------------
 // Hardware Target
@@ -8,14 +8,8 @@
 
 // Target Platform: DE1-SoC Board
 
-// Hardware configuration:
-// QE 0 and 1:
-//   GPIO_1[29-28] are used for QE 0 inputs B and A
-//   GPIO_1[31-30] are used for QE 1 inputs B and A
-// HPS interface:
-//   Mapped to offset of 0x1000 in light-weight MM interface aperature
 
-// Load kernel module with insmod qe_driver.ko [param=___]
+// Load kernel module with insmod I2C_driver.ko [param=___]
 
 //-----------------------------------------------------------------------------
 
