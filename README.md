@@ -1,7 +1,7 @@
 # I2C
 I2C ip core with Avalon Interface 
 
-Have a look to the document before viewing the code 
+Have a look at the document before viewing the code 
 
 This I2C works at 100 KHz 
 
@@ -25,4 +25,4 @@ I tried my level best to write the comments in the code
 
 If you have any doubts regarding that you can reach me at mouryabc@outlook.com
 
-I have to thank my professor Jason Losh and my TA Azmi for clarifying my doubts during the development time 
+I thank my professor Jason Losh and my TA Azmi for clarifying my doubts during the development time 
