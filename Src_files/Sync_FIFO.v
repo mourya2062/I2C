@@ -5,25 +5,25 @@ module Sync_FIFO
 	parameter fifo_depth_bits	= 6			//work on this to automate based on fifo_depth 
 )
 	(
-		input  							clock							,
-		input  							reset            			,
-		input  							wr_req 						,
-		input  [data_width-1:0] 	wr_data						,
-		input  							rd_req            		,
-		output reg [data_width-1:0]rd_data						,
-		output  							full            			,
-		output  							empty            			,
-		output  reg						overflow            		,
-		input  							clear_overflow_request  ,
-		output [fifo_depth_bits-1:0]wr_index   				,
-		output [fifo_depth_bits-1:0]rd_index   
+		input  				clock			,
+		input  				reset            	,
+		input  				wr_req 			,
+		input  [data_width-1:0] 	wr_data			,
+		input  				rd_req            	,
+		output reg [data_width-1:0]	rd_data			,
+		output  			full            	,
+		output  			empty            	,
+		output  reg			overflow            	,
+		input  				clear_overflow_request  ,
+		output [fifo_depth_bits-1:0]	wr_index   		,
+		output [fifo_depth_bits-1:0]	rd_index   
 	);
 	
-	reg [data_width-1:0] memory [0:fifo_depth-1]					;
-	reg [fifo_depth_bits:0] 	wr_index_counter   				; //+1 bit counters to make fifo status logic easier
-	reg [fifo_depth_bits:0]  	rd_index_counter 					;
-	wire full_sig  														;
-	wire empty_sig 														;
+	reg [data_width-1:0] memory [0:fifo_depth-1]			;//memory creation 
+	reg [fifo_depth_bits:0] 	wr_index_counter   		; //+1 bit counters to make fifo status logic easier
+	reg [fifo_depth_bits:0]  	rd_index_counter 		;
+	wire full_sig  							;
+	wire empty_sig 							;
 
 	////////////////////
 	//FIFO write logic//
@@ -33,7 +33,7 @@ module Sync_FIFO
 	begin
 		if(reset == 1'b1) 
 		begin
-			wr_index_counter	<= {fifo_depth_bits{1'b0}}								;
+			wr_index_counter	<= {fifo_depth_bits{1'b0}}	;
 		end
 		else if(wr_req == 1'b1 && full_sig == 1'b0) 
 		begin
@@ -59,16 +59,16 @@ module Sync_FIFO
 	begin
 		if(reset == 1'b1)
 		begin
-			rd_index_counter	<= {fifo_depth_bits{1'b0}}											;
-			rd_data				<=	{data_width{1'b0}}												;
+			rd_index_counter	<= {fifo_depth_bits{1'b0}}				;
+			rd_data			<= {data_width{1'b0}}					;
 		end	
 		else if(rd_req == 1'b1 && empty_sig != 1'b1) 
 		begin
-			rd_data				<=	memory[rd_index_counter[fifo_depth_bits-1:0]]			;
+			rd_data			<=	memory[rd_index_counter[fifo_depth_bits-1:0]]	;
 			if(rd_index_counter[fifo_depth_bits] == 1'b1)
-				rd_index_counter 	<=  {1'b0,rd_index_counter[fifo_depth_bits-1:0]+1}		;//incrementing the next fifo read address
+				rd_index_counter<=  {1'b0,rd_index_counter[fifo_depth_bits-1:0]+1}	;//incrementing the next fifo read address
 			else
-				rd_index_counter 	<=  rd_index_counter + 1'b1									;
+				rd_index_counter<=  rd_index_counter + 1'b1				;
 		end 
 	end 
 	
@@ -76,9 +76,6 @@ module Sync_FIFO
 	///////////////////////
 	//FIFO status signals//
 	///////////////////////
-	
-	//assign full_sig 	= ((wr_index_counter[fifo_depth_bits] == 1)&& (rd_index_counter == 0))?1'b1 :1'b0		; 
-	//assign empty_sig 	= ((wr_index_counter == 0)&& (rd_index_counter == 0))?1'b1 :1'b0						; 
 	assign full_sig 	= ((wr_index_counter[fifo_depth_bits-1:0] == rd_index_counter)&& (wr_index_counter[fifo_depth_bits] == 1))?1'b1 :1'b0						; 
 	assign empty_sig 	= ((wr_index_counter[fifo_depth_bits-1:0] == rd_index_counter)&& (wr_index_counter[fifo_depth_bits] != 1))?1'b1 :1'b0						; 
 	assign wr_index 	= wr_index_counter[fifo_depth_bits-1:0]																		;
@@ -86,6 +83,7 @@ module Sync_FIFO
 	assign full 		= full_sig																				;
 	assign empty 		= empty_sig 																			;
 	
+	////overflow should be cleared soon after read but my requirement is to clear the bit on exclusive overfloe request 
 	always @(posedge clock)
 	begin
 		if(reset == 1'b1)  
